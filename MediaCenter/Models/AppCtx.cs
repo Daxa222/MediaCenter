@@ -11,5 +11,8 @@ namespace MediaCenter.Models
         {
             Database.EnsureCreated();
         }
+
+
+        public DbSet<PostStatus> PostStatuses { get; set; }
     }
 }
