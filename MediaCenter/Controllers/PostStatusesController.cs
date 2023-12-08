@@ -99,7 +99,8 @@ namespace MediaCenter.Controllers
             return View(model);
         }
 
-        
+
+        // POST: Posts/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(byte id, EditPostStatusViewModel model)

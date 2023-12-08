@@ -14,5 +14,9 @@ namespace MediaCenter.Models.Data
         [Required(ErrorMessage = "Введите статус поста")]
         [Display(Name ="Статус поста")]
         public string StatusPost { get; set; }
+
+        //Навигационные свойства
+        [Required]
+        public ICollection<Post> Posts { get; set; }
     }
 }

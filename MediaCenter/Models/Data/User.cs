@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace MediaCenter.Models.Data
@@ -16,5 +18,11 @@ namespace MediaCenter.Models.Data
         [Required]
         [Display(Name = "Дата регистрации")]
         public DateTime RegDate { get; set; }
+
+
+        //Навигационные свойства
+        public ICollection<Post> Posts { get; set; }
+
+        public ICollection<Like> Likes { get; set; }
     }
 }

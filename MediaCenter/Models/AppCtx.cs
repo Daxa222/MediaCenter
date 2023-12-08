@@ -1,6 +1,7 @@
 ﻿using MediaCenter.Models.Data;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace MediaCenter.Models
 {
@@ -14,5 +15,9 @@ namespace MediaCenter.Models
 
 
         public DbSet<PostStatus> PostStatuses { get; set; }
+
+        public DbSet<Post> Posts { get; set; }
+
+        public DbSet<Like> Likes { get; set; }
     }
 }

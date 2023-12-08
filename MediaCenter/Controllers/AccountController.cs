@@ -74,23 +74,25 @@ namespace MediaCenter.Controllers
         {
             /*if (ModelState.IsValid)
             {*/
-            var result =
-                await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                
 
-            if (result.Succeeded)
-            {
+                var result =
+                        await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
 
-                return RedirectToAction("Index", "Home");
-            }
-            // проверяем, принадлежит ли URL приложению
-            if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-            {
-                return Redirect(model.ReturnUrl);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
+                    if (result.Succeeded)
+                    {
+
+                        return RedirectToAction("Index", "Home");
+                    }
+                    // проверяем, принадлежит ли URL приложению
+                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
             /*}
             else
             {
