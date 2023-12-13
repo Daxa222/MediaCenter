@@ -1,40 +1,55 @@
-﻿@model IEnumerable<MediaCenter.Models.Data.Like>
+﻿@model IEnumerable<MediaCenter.Models.Data.Chat>
 
 @{
-    ViewData["Title"] = "Лайки";
+    ViewData["Title"] = "Чаты";
 }
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Главная</a></li>
-        <li class="breadcrumb-item" archive">Лайки</li>
+        <li class="breadcrumb-item" archive">Чаты</li>
     </ol>
 </nav>
 
-<h2>Лайки</h2>
+<h2>Чаты</h2>
 
 <h6>
     <a class="btn text-dark" asp-action="Create">
-        <i class="far fa-plus-square"></i>  Добавить лайк
+        <i class="far fa-plus-square"></i>  Добавить сообщение
     </a>
 </h6>
-
-
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Post.StatusPostTitlePost)
+                @Html.DisplayNameFor(model => model.DepartureDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdRecipient)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdSender)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
+        @foreach (var item in Model) {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Post.StatusPostTitlePost)
+                    @Html.DisplayFor(modelItem => item.DepartureDate.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.Email)
                 </td>
                 <td>
                     <a class="btn text-dark" asp-action="Details" asp-route-id="@item.Id" title="Посмотреть подробнее">

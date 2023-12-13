@@ -1,13 +1,13 @@
-﻿@model MediaCenter.Models.Data.Like
+﻿@model MediaCenter.Models.Data.Chat
 
 @{
-    ViewData["Title"] = "Удаление - Лайки";
+    ViewData["Title"] = "Удаление - Чаты";
 }
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Главная</a></li>
-        <li class="breadcrumb-item"><a asp-controller="FormsOfStudy" asp-action="Index">Лайки</a></li>
+        <li class="breadcrumb-item"><a asp-controller="FormsOfStudy" asp-action="Index">Чаты</a></li>
         <li class="breadcrumb-item active">Удаление</li>
     </ol>
 </nav>
@@ -16,7 +16,7 @@
     <a class="btn text-dark" asp-action="Index" title="Вернуться к списку">
         <i class="fas fa-arrow-left"></i>
     </a>
-    Удаление лайка
+    Удаление сообщения
 </h3>
 
 <div>
@@ -27,24 +27,28 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.InstallationDate)
+            @Html.DisplayNameFor(model => model.DepartureDate.Date)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.InstallationDate)
+            @Html.DisplayFor(model => model.DepartureDate.Date)
         </dd>
-
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IdSender)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdSender)
+        </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.User.Email)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.User.Email)
-        </dd>
-
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Post.StatusPostTitlePost)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Post.StatusPostTitlePost)
         </dd>
     </dl>
 

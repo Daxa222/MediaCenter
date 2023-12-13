@@ -19,5 +19,7 @@ namespace MediaCenter.Models
         public DbSet<Post> Posts { get; set; }
 
         public DbSet<Like> Likes { get; set; }
+
+        public DbSet<Chat> Chats { get; set; }
     }
 }

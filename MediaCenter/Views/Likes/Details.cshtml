@@ -20,16 +20,16 @@
             @Html.DisplayFor(model => model.InstallationDate)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
+            @Html.DisplayNameFor(model => model.User.Email)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Id)
+            @Html.DisplayFor(model => model.User.Email)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Post)
+            @Html.DisplayNameFor(model => model.Post.StatusPostTitlePost)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Post.IdAuthor)
+            @Html.DisplayFor(model => model.Post.StatusPostTitlePost)
         </dd>
     </dl>
 </div>

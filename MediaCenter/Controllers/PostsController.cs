@@ -25,7 +25,7 @@ namespace MediaCenter.Controllers
         // GET: Posts
         public async Task<IActionResult> Index()
         {
-            //через контекст данных получаем доступ к таблице базы данных PostStatuses
+            //через контекст данных получаем доступ к таблице базы данных Posts
             var appCtx = _context.Posts
                 .Include(p => p.PostStatus)      //и связываем с таблицей статусы постов через класс PostStatus
                 .Include(p => p.User)           //и связываем с таблицей пользователи через класс User
@@ -86,6 +86,7 @@ namespace MediaCenter.Controllers
                     Multimedia = model.Multimedia,
                     Description = model.Description,
                     IdStatus = model.IdStatus,
+                    DatePublication = model.DatePublication.Date,
                     IdAuthor = model.IdAuthor
                 };
 

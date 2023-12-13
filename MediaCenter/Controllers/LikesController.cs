@@ -1,5 +1,7 @@
 ﻿using MediaCenter.Models;
 using MediaCenter.Models.Data;
+using MediaCenter.ViewModels.Likes;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,15 +12,26 @@ namespace MediaCenter.Controllers
     {
         private readonly AppCtx _context;
 
-        public LikesController(AppCtx context)
+        private readonly UserManager<User> _userManager;
+
+        public LikesController(AppCtx context,
+            UserManager<User> user)
         {
             _context = context;
+            _userManager = user;
         }
 
         // GET: Likes
         public async Task<IActionResult> Index()
         {
-            var appCtx = _context.Likes.Include(l => l.Post).Include(l => l.User);
+            //через контекст данных получаем доступ к таблице базы данных Likes
+            var appCtx = _context.Likes
+                .Include(l => l.Post)             //и связываем с таблицей постов через класс Post
+                .Include(l => l.User)            //и связываем с таблицей пользователи через класс User
+                .OrderBy(f => f.IdUser);        //и сортируем все записи по пользователю
+
+
+            //возвращаем в представление полученный список постов
             return View(await appCtx.ToListAsync());
         }
 
@@ -43,29 +56,44 @@ namespace MediaCenter.Controllers
         }
 
         // GET: Likes/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["IdPost"] = new SelectList(_context.Posts, "Id", "IdAuthor");
-            ViewData["IdUser"] = new SelectList(_context.Users, "Id", "Id");
+            IdentityUser user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+
+            ViewData["IdPost"] = new SelectList(_context.Posts.OrderBy(o => o.StatusPostTitlePost), "Id", "StatusPostTitlePost");
+            ViewData["IdUser"] = new SelectList(_context.Users.OrderBy(o => o.Email), "Id", "Email", user.Id);
             return View();
         }
 
         // POST: Likes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,InstallationDate,IdUser,IdPost")] Like like)
+        public async Task<IActionResult> Create(CreateLikeViewModel model)
         {
+            if (_context.Likes
+                .Where(f => f.IdPost == model.IdPost && f.IdUser == model.IdUser)
+                .FirstOrDefault() != null)
+            {
+                ModelState.AddModelError("", "Лайк у поста уже существует");
+            }
+
             if (ModelState.IsValid)
             {
+                Like like = new()
+                {
+                    IdPost = model.IdPost,
+                    IdUser = model.IdUser,
+                    InstallationDate = model.InstallationDate.Date
+                };
+
                 _context.Add(like);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdPost"] = new SelectList(_context.Posts, "Id", "IdAuthor", like.IdPost);
-            ViewData["IdUser"] = new SelectList(_context.Users, "Id", "Id", like.IdUser);
-            return View(like);
+
+            ViewData["IdPost"] = new SelectList(_context.Posts.OrderBy(o => o.StatusPostTitlePost), "Id", "StatusPostTitlePost", model.IdPost);
+            ViewData["IdUser"] = new SelectList(_context.Users.OrderBy(o => o.Email), "Id", "Email", model.IdUser);
+            return View(model);
         }
 
         // GET: Likes/Edit/5
@@ -81,18 +109,26 @@ namespace MediaCenter.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdPost"] = new SelectList(_context.Posts, "Id", "IdAuthor", like.IdPost);
-            ViewData["IdUser"] = new SelectList(_context.Users, "Id", "Id", like.IdUser);
-            return View(like);
+
+            EditLikeViewModel model = new()
+            {
+                IdPost = like.IdPost,
+                IdUser = like.IdUser,
+                InstallationDate = like.InstallationDate.Date
+            };
+
+            ViewData["IdPost"] = new SelectList(_context.Posts.OrderBy(o => o.StatusPostTitlePost), "Id", "StatusPostTitlePost", model.IdPost);
+            ViewData["IdUser"] = new SelectList(_context.Users.OrderBy(o => o.Email), "Id", "Email", model.IdUser);
+            return View(model);
         }
 
         // POST: Likes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,InstallationDate,IdUser,IdPost")] Like like)
+        public async Task<IActionResult> Edit(int id, EditLikeViewModel model)
         {
+            Like like = await _context.Likes.FindAsync(id);
+
             if (id != like.Id)
             {
                 return NotFound();
@@ -102,6 +138,9 @@ namespace MediaCenter.Controllers
             {
                 try
                 {
+                    like.IdPost = model.IdPost;
+                    like.IdUser = model.IdUser;
+                    like.InstallationDate = model.InstallationDate.Date;
                     _context.Update(like);
                     await _context.SaveChangesAsync();
                 }
@@ -118,9 +157,9 @@ namespace MediaCenter.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdPost"] = new SelectList(_context.Posts, "Id", "IdAuthor", like.IdPost);
-            ViewData["IdUser"] = new SelectList(_context.Users, "Id", "Id", like.IdUser);
-            return View(like);
+            ViewData["IdPost"] = new SelectList(_context.Posts.OrderBy(o => o.StatusPostTitlePost), "Id", "StatusPostTitlePost", model.IdPost);
+            ViewData["IdUser"] = new SelectList(_context.Users.OrderBy(o => o.Email), "Id", "Email", model.IdUser);
+            return View(model);
         }
 
         // GET: Likes/Delete/5
